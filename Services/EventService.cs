@@ -7,7 +7,7 @@ namespace MaxonEventManagement.Services
 {
     public class EventService : IEvent
     {
-        private readonly ApplicationDbContext _context;
+        public readonly ApplicationDbContext _context;
         public EventService(ApplicationDbContext context)
         {
             _context = context;
@@ -15,18 +15,21 @@ namespace MaxonEventManagement.Services
         public string DeleteEvent(Event ev)
         {
              _context.Events.Remove(ev);
-            _context.SaveChanges();
+             _context.SaveChanges();
             return "Event Deleted Successifully";
         }
 
         public async Task<List<Event>> GetAllEvent()
         {
+            //This line uses the include so that the event is returned with there corresponding tickets
+            //To be implemented Later
+           /*return await _context.Events.Include(x=>x.Tickets).ToListAsync();*/
            return await _context.Events.ToListAsync();
         }
 
-        public async Task<Event> GetEvent( int id)
+        public Event GetEvent( int id)
         {
-            return await _context.Events.Where(x => x.EventId == id).FirstOrDefaultAsync();
+            return  _context.Events.Where(x => x.EventId == id).FirstOrDefault();
         }
 
         public string UpdateEvent(Event ev)
